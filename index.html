@@ -130,6 +130,7 @@
   <a onclick="showSection('map')">Мапа</a>
   <a onclick="showSection('feedback')">Відгуки</a>
   <a onclick="showSection('marketplace')">Торгова площа</a>
+  <a onclick="showSection('discord')">Діскорд</a>
 </nav>
 
 <div class="content" id="main-content">
@@ -161,6 +162,11 @@
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeuH1K3PFJI96me94G3a1gF-yIdFfE7bemALZrGJmbu3HDnsw/viewform?embedded=true" width="100%" height="500" marginheight="0" marginwidth="0">Завантаження…</iframe>
 </div>
 
+  <div class="content" id="discord" style="display:none;">
+  <h2>Наш діскорд</h2>
+    <ul>
+    <li><h1><a href="https://discord.gg/RxGhgnG32f">Так званий Discord</a></h1></li>
+</div>
 
 <div class="content" id="marketplace" style="display:none;">
   <h2>📢 Торгова площа - Оголошення</h2>
@@ -215,7 +221,7 @@
 
 <script>
   function showSection(id) {
-    const sections = ['main-content', 'guide', 'map', 'feedback', 'marketplace'];
+    const sections = ['main-content', 'guide', 'map', 'feedback', 'marketplace', 'discord'];
     sections.forEach(sectionId => {
       document.getElementById(sectionId).style.display = (sectionId === id) ? 'block' : 'none';
     });
