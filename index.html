@@ -1,425 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Project Zomboid Server</title>
-  <link rel="icon" href="Icon.ico">
+  <title>RUST AUTH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+
     body {
       margin: 0;
-      background-color: #1b1b1b;
-      color: #e0e0e0;
-      font-family: 'Courier New', Courier, monospace;
-      background-image: url('https://i.pinimg.com/736x/d3/59/4d/d3594dfd1811d2b10d283f72b75268a9.jpg');
-      background-size: cover;
-      background-attachment: fixed;
-    }
-
-    header {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 1rem 2rem;
-      text-align: center;
-      border-bottom: 2px solid #444;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      color: #ff4444;
-      margin: 0;
-    }
-
-    nav {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #3a3a3a, #0f0f0f 70%);
+      color: #e6e6e6;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 1rem;
-      background-color: rgba(30, 30, 30, 0.8);
-      padding: 0.5rem;
     }
 
-    nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
+    .auth-box {
+      width: 360px;
+      background: #1b1b1b;
+      border: 2px solid #c97a2b;
+      border-radius: 6px;
+      padding: 24px;
+      box-shadow: 0 0 25px rgba(201,122,43,.25);
     }
 
-    nav a:hover {
-      color: #ff4444;
-    }
-
-    .content {
-      max-width: 800px;
-      margin: 2rem auto;
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #000;
-    }
-
-    .content h2 {
-      color: #ff4444;
-    }
-
-    footer {
+    .title {
       text-align: center;
-      padding: 1rem;
-      background-color: rgba(0, 0, 0, 0.8);
-      font-size: 0.9rem;
-      border-top: 1px solid #333;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ff9f3a;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 14px;
+      background: #0f0f0f;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
     }
 
     button {
-      background-color: #ff4444;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background-color: #ff2222;
-    }
-
-   
-    .map-container {
       width: 100%;
-      height: 500px;
-      overflow: hidden;
-      position: relative;
-      border: 2px solid #444;
-      border-radius: 8px;
-      cursor: grab;
-    }
-
-    .map-container:active {
-      cursor: grabbing;
-    }
-
-    .map-container img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: top left;
-      user-drag: none;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    
-    iframe {
+      padding: 12px;
+      background: linear-gradient(#ffb14a, #c97a2b);
       border: none;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .switch {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #ff4a4a;
+      font-size: 13px;
+      margin-bottom: 10px;
+      display: none;
     }
   </style>
 </head>
+
 <body>
+  <div class="auth-box">
+    <div class="title" id="title">RUST</div>
 
-<header>
-  <h1>Project Zomboid Survival</h1>
-</header>
+    <div class="error" id="error"></div>
 
-<nav>
-  <a onclick="showSection('main-content')">Головна</a>
-  <a onclick="showSection('guide')">Ip-port</a>
-  <a onclick="showSection('map')">Мапа</a>
-  <a onclick="showSection('feedback')">Відгуки</a>
-  <a onclick="showSection('marketplace')">Торгова площа</a>
-  <a onclick="showSection('discord')">Діскорд</a>
-  <a onclick="showSection('mods')">Сервер!</a>
-</nav>
+    <label>Email</label>
+    <input type="email" id="email">
 
-<div class="content" id="main-content">
-  <h2>Ласкаво просимо!</h2>
-  <p>Це сайт серверу по Project Zomboid. Тут ви знайдете поради з виживання, мапи, гіди та багато іншої інформації наш discord знизу.</p>
-</div>
-  
-<div class="content" id="guide" style="display:none;">
-  <h2>Гід для новачків</h2>
-  <ul>
-    <li>Запусти гру → Join → Internet → Favorites</li>
-    <li>IP: <code>147.185.221.30</code> | порт: <code>48977</code></li>
-  </ul>
-  <div class="map-container">
-    <img src="guide.jpg" style="width: 100%; height: auto;" />
-  </div>  
-</div>
+    <label>Пароль</label>
+    <input type="password" id="password">
 
-<div class="content" id="map" style="display:none;">
-  <h2>Мапа</h2>
-  <p>Ви можете масштабувати та перетягувати мапу.</p>
-  <div class="map-container" id="map-container">
-    <img src="map.jpg" alt="Мапа гри" id="zoomable-map" />
+    <button id="btn" onclick="auth()">УВІЙТИ</button>
+
+    <div class="switch" id="switch" onclick="toggleMode()">
+      Don't have acoount? Register
+    </div>
   </div>
-</div>
 
-<div class="content" id="feedback" style="display:none;">
-  <h2>Відгуки</h2>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeuH1K3PFJI96me94G3a1gF-yIdFfE7bemALZrGJmbu3HDnsw/viewform?embedded=true" width="100%" height="500" marginheight="0" marginwidth="0">Завантаження…</iframe>
-</div>
+  <script>
+    let mode = 'login';
 
-  <div class="content" id="discord" style="display:none;">
-  <h2>Наш діскорд</h2>
-    <ul>
-    <li><h1><a href="https://discord.gg/RxGhgnG32f">Так званий Discord</a></h1></li>
-</div>
+    function toggleMode() {
+      const btn = document.getElementById('btn');
+      const sw = document.getElementById('switch');
+      const title = document.getElementById('title');
+      document.getElementById('error').style.display = 'none';
 
-  <div class="content" id="mods" style="display:none;">
-  <h2>Моди</h2>
-  <h2>⚔️ Постійне ПВП — 24/7</h2>
-    <ul>
-    <li><h3>
-	Гравці можуть нападати один на одного в будь-який час.
-	<li><h3>
-	Немає безпечних зон — тільки ти та твої рішення.
-	</h3></li>
-	</h3></li>
-	<h2>🧰 ЛУТ ТА РЕСУРСИ — ДЕФІЦИТ УСЬОГО</h2>
-	<li><h3>
-	Речей спавниться дуже мало, щоб знайти щось потрібне — доведеться реально досліджувати карту.
-	<li><h3>
-	Респавн луту — раз на 12 годин реального часу.
-	</h3></li>
-	<li><h3>
-	Базові речі стають цінними (бинти, їжа, вода, інструменти).
-	</h3></li>
-	</h3></li>
-		<h2>🚙 ТРАНСПОРТ — РЕАЛЬНА РІДКІСТЬ</h2>
-	<li><h3>
-	Відсутні колеса, вікна, акумулятор.
-	<li><h3>
-	Поламані двигуни.
-	</h3></li>
-	<li><h3>
-	Немає пального.
-	</h3></li>
-	<li><h3>
-	Ремонт машин складний і глибокий — потрібні запчастини та навички механіка.
-	</h3></li>
-	<li><h3>
-	Доступні мотоцикли, квадроцикли, кастомні машини апокаліпсису.
-	</h3></li>
-	</h3></li>
-			<h2>🛡️ ЗБРОЯ ТА БРОНЯ — ПОКРАЩЕНА КАСТОМІЗАЦІЯ</h2>
-	<li><h3>
-	Можна модифікувати зброю: приціли, глушники, ліхтарики, магазини, стабілізатори.
-	<li><h3>
-    Зброя різних типів: старі, саморобні, військові.
-	</h3></li>
-	<li><h3>
-	Бронежилети, шоломи, маски, тактична броня — усе можна знайти або скрафтити.
-	</h3></li>
-	<li><h3>
-	Броню та одяг тепер реально лагодити (поліцейські бронежилети, каски, захисні куртки).
-	</h3></li>
-	</h3></li>
-	    <h2>🏚 НОВІ МІСЦЯ ДЛЯ ЖИТТЯ ТА СХОВКІВ</h2>
-	<li><h3>
-	Додаються повноцінні підвали — нові локації для схованок та будівництва баз.
-	<li><h3>
-	Портативні спальні місця — спальники, які можна класти де завгодно (на землі, в будівлях, в таборах).
-	</h3></li>
-	</h3></li>
-		    <h2>🧼 ГІГІЄНА ТА ПОБУТ</h2>
-	<li><h3>
-	Можна купатися, прати одяг, чистити речі.
-	<li><h3>
-	Брудний одяг — додатковий ризик зараження та зниження ефективності.
-	</h3></li>
-	<li><h3>
-	Дощ змиває кров — зі стін.
-	</h3></li>
-	</h3></li>
-			    <h2>🧟 ПОКРАЩЕНІ ЗОМБІ ТА ПСИХОЛОГІЧНИЙ ТИСК</h2>
-	<li><h3>
-	Зомбі орієнтуються на крики поранених.
-	<li><h3>
-	Страх та стрес впливають на персонажа.
-	</h3></li>
-	<li><h3>
-	Поступово можна втрачати або навпаки — нарощувати холоднокровність.
-	</h3></li>
-	<li><h3>
-	Адреналін дозволяє боротися в екстремальних ситуаціях, але виснажує ще швидше.
-	</h3></li>
-	</h3></li>
-				    <h2>🔫 БОЙОВА СИСТЕМА — БЛИЖНІЙ БІЙ ТА СТРІЛЬБА</h2>
-	<li><h3>
-	Додаються нові анімації для бою: удари, добивання, блоки.
-	<li><h3>
-	Можна стріляти, рухаючись, ухилятись та навіть застосовувати реалістичні бойові маневри.
-	</h3></li>
-	<li><h3>
-	З'явився текстовий бойовий лог — тепер бачиш скільки ти реально наніс шкоди.
-	</h3></li>
-	</h3></li>
-					    <h2>🧹 ЗРУЧНОСТІ ТА ПОЛЕГШЕННЯ ГРИ</h2>
-	<li><h3>
-	Новий зручний інтерфейс сортування речей в інвентарі та рюкзаках.
-	<li><h3>
-	Видно скільки залишилось пального в генераторах.
-	</h3></li>
-	<li><h3>
-	Можна читати книжки під час ходьби.
-	</h3></li>
-	<li><h3>
-	Зброю та спорядження можна детально оглядати перед використанням.
-	</h3></li>
-	<li><h3>
-	Можна малювати відмітки на карті.
-	</h3></li>
-	</h3></li>
-						    <h2>⏰ РЕАЛЬНИЙ ІГРОВИЙ ЧАС</h2>
-	<li><h3>
-	1 доба в грі = 2 години реального часу — кожен день має значення.
-	</h3></li>
-							    <h2>🔥 ЯКИЙ ЦЕ РЕЗУЛЬТАТ?</h2>
-	<li><h3>
-	Жорстке виживання.
-	</h3></li>
-	<li><h3>
-	Дефіцит всього.
-	</h3></li>
-	<li><h3>
-	Складний ремонт техніки.
-	</h3></li>
-	<li><h3>
-	Постійний ПВП.
-	</h3></li>
-	<li><h3>
-	Глибока кастомізація зброї, броні, побуту.
-	</h3></li>
-	<li><h3>
-	Реалізм у всіх аспектах.
-	</h3></li>
-	<h2>🎯 ЖОДНОГО РП. ЖОДНОЇ ПОМ'ЯКШЕНОЇ КАЗУАЛЬЩИНИ. ЛИШЕ ЧИСТЕ ВИЖИВАННЯ.</h2>
-</div>
-
-<div class="content" id="marketplace" style="display:none;">
-  <h2>📢 Торгова площа - Оголошення</h2>
-  
-  <h3>Залишити оголошення</h3>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSctebhwruzx6b_pzksBRkMxYYOuaBAZGxTaQSBhGcvDTc59Gg/viewform?embedded=true" 
-    width="100%" height="700" marginheight="0" marginwidth="0" loading="lazy">Завантаження…</iframe>
-  
-  <h3 style="margin-top: 2rem;">Всі оголошення</h3>
-  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQUrMMLxcezsW3w6kAU4Cp_r-aWHfJikTeO16r2VwjMyoDnrCYiViSrXxYO4LeB9XO--Ls0qEXCwDd5/pubhtml?gid=1209075208&single=true" 
-    width="100%" height="400" loading="lazy"></iframe>
-</div>
-
-<div class="content" id="server-features">
-  <h2>🎮 Що є на сервері?</h2>
-  <ul>
-    <li>🧟‍♂️ Нормальна кількість зомбі</li>
-    <li>🕰️ Респавн луту кожні 12 годин</li>
-    <li>☠️ Мало їжі та припасів</li>
-    <li>🌡️ Холодильник має ціну</li>
-  </ul>
-</div>
-
-<div class="content" id="zombie-types">
-  <h2>🧟‍♂️ Типи зомбі</h2>
-  <ul>
-    <li><strong>Звичайні</strong> — доволі бистро ходять</li>
-    <li><strong>Злопам'ятні</strong> — запам'ятовують все</li>
-    <li><strong>Вушасті</strong> — дуже добре чують</li>
-    <li><strong>Пердуни</strong> — полюють в темряві</li>
-  </ul>
-</div>
-
-<div class="content" id="mental-state">
-  <h2>🧠 Психічний стан</h2>
-  <p id="mental-message">Ти почуваєшся нормально... поки що.</p>
-  <button onclick="changeMentalState()">🎭 Що в мене в голові?</button>
-</div>
-
-<div class="content" id="choice-sim">
-  <h2>⚔️ Симулятор вибору</h2>
-  <p>Що ти зробиш?</p>
-  <button onclick="simulateChoice('stay')">🛑 Залишитись вдома</button>
-  <button onclick="simulateChoice('loot')">🪓 Піти по лут</button>
-  <button onclick="simulateChoice('call')">📻 Зв’язатись з кимось</button>
-  <div id="choice-result" style="margin-top: 15px; font-style: italic;"></div>
-</div>
-
-<footer>
-  Створено by Smaill.pro | Discord: <a href="https://discord.gg/RxGhgnG32f">Наш сервер</a>
-</footer>
-
-<script>
-  function showSection(id) {
-    const sections = ['main-content', 'guide', 'map', 'feedback', 'marketplace', 'discord', 'mods'];
-    sections.forEach(sectionId => {
-      document.getElementById(sectionId).style.display = (sectionId === id) ? 'block' : 'none';
-    });
-  }
-
-  function changeMentalState() {
-    const states = [
-      "Ти чуєш щось... це був крик?",
-      "Починаєш говорити сам з собою...",
-      "Тиша починає дратувати тебе",
-      "Здається, хтось стежить за тобою...",
-      "Ти втрачаєш відчуття часу..."
-    ];
-    document.getElementById('mental-message').textContent =
-      states[Math.floor(Math.random() * states.length)];
-  }
-
-  function simulateChoice(choice) {
-    let result;
-    if (choice === 'stay') {
-      result = "Тебе знайшли. І це були не друзі.";
-    } else if (choice === 'loot') {
-      result = "Ти знайшов консерви, але втратив друга.";
-    } else if (choice === 'call') {
-      result = "Ніхто не відповів... але тепер вони знають, де ти.";
+      if (mode === 'login') {
+        mode = 'register';
+        btn.textContent = 'Register';
+        sw.textContent = 'Have account? Login';
+        title.textContent = 'RUST REG';
+      } else {
+        mode = 'login';
+        btn.textContent = 'Login';
+        sw.textContent = 'Register';
+        title.textContent = 'RUST';
+      }
     }
-    document.getElementById('choice-result').textContent = result;
-  }
 
-  
-  const mapContainer = document.getElementById('map-container');
-  const mapImage = document.getElementById('zoomable-map');
-  let scale = 1;
-  let originX = 0;
-  let originY = 0;
-  let isDragging = false;
-  let startX, startY;
+    function auth() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const error = document.getElementById('error');
 
-  mapContainer.addEventListener('wheel', e => {
-    e.preventDefault();
-    const delta = -e.deltaY * 0.0015;
-    scale = Math.min(Math.max(0.5, scale + delta), 3);
-    mapImage.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
-  });
+      if (!email || !pass) {
+        error.textContent = 'Заповни всі поля';
+        error.style.display = 'block';
+        return;
+      }
 
-  mapContainer.addEventListener('mousedown', e => {
-    isDragging = true;
-    startX = e.clientX - originX;
-    startY = e.clientY - originY;
-    mapContainer.style.cursor = 'grabbing';
-  });
+      const key = 'user_' + email;
 
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-    mapContainer.style.cursor = 'grab';
-  });
+      if (mode === 'register') {
+        if (localStorage.getItem(key)) {
+          error.textContent = 'Акаунт вже існує';
+          error.style.display = 'block';
+          return;
+        }
+        localStorage.setItem(key, pass);
+        alert('Реєстрація успішна');
+        toggleMode();
+      } else {
+        if (localStorage.getItem(key) !== pass) {
+          error.textContent = 'Невірний email або пароль';
+          error.style.display = 'block';
+          return;
+        }
 
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    originX = e.clientX - startX;
-    originY = e.clientY - startY;
-    mapImage.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
-  });
-</script>
+        // 🔒 авторизація
+        localStorage.setItem('logged_in', 'true');
+        localStorage.setItem('current_user', email);
 
+        window.location.href = 'main.html';
+      }
+    }
+  </script>
 </body>
 </html>
-
-
