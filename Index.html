@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>RUST AUTH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #3a3a3a, #0f0f0f 70%);
+      color: #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-box {
+      width: 360px;
+      background: #1b1b1b;
+      border: 2px solid #c97a2b;
+      border-radius: 6px;
+      padding: 24px;
+      box-shadow: 0 0 25px rgba(201,122,43,.25);
+    }
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ff9f3a;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 14px;
+      background: #0f0f0f;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(#ffb14a, #c97a2b);
+      border: none;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .switch {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #ff4a4a;
+      font-size: 13px;
+      margin-bottom: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="auth-box">
+    <div class="title" id="title">RUST</div>
+
+    <div class="error" id="error"></div>
+
+    <label>Email</label>
+    <input type="email" id="email">
+
+    <label>Пароль</label>
+    <input type="password" id="password">
+
+    <button id="btn" onclick="auth()">УВІЙТИ</button>
+
+    <div class="switch" id="switch" onclick="toggleMode()">
+      Don't have acoount? Register
+    </div>
+  </div>
+
+  <script>
+    let mode = 'login';
+
+    function toggleMode() {
+      const btn = document.getElementById('btn');
+      const sw = document.getElementById('switch');
+      const title = document.getElementById('title');
+      document.getElementById('error').style.display = 'none';
+
+      if (mode === 'login') {
+        mode = 'register';
+        btn.textContent = 'Register';
+        sw.textContent = 'Have account? Login';
+        title.textContent = 'RUST REG';
+      } else {
+        mode = 'login';
+        btn.textContent = 'Login';
+        sw.textContent = 'Register';
+        title.textContent = 'RUST';
+      }
+    }
+
+    function auth() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const error = document.getElementById('error');
+
+      if (!email || !pass) {
+        error.textContent = 'Заповни всі поля';
+        error.style.display = 'block';
+        return;
+      }
+
+      const key = 'user_' + email;
+
+      if (mode === 'register') {
+        if (localStorage.getItem(key)) {
+          error.textContent = 'Акаунт вже існує';
+          error.style.display = 'block';
+          return;
+        }
+        localStorage.setItem(key, pass);
+        alert('Реєстрація успішна');
+        toggleMode();
+      } else {
+        if (localStorage.getItem(key) !== pass) {
+          error.textContent = 'Невірний email або пароль';
+          error.style.display = 'block';
+          return;
+        }
+
+        // 🔒 авторизація
+        localStorage.setItem('logged_in', 'true');
+        localStorage.setItem('current_user', email);
+
+        window.location.href = 'main.html';
+      }
+    }
+  </script>
+</body>
+</html>
