@@ -87,10 +87,10 @@
     <label>Email</label>
     <input type="email" id="email">
 
-    <label>Пароль</label>
+    <label>Password</label>
     <input type="password" id="password">
 
-    <button id="btn" onclick="auth()">УВІЙТИ</button>
+    <button id="btn" onclick="auth()">LOGIN</button>
 
     <div class="switch" id="switch" onclick="toggleMode()">
       Don't have acoount? Register
@@ -125,7 +125,7 @@
       const error = document.getElementById('error');
 
       if (!email || !pass) {
-        error.textContent = 'Заповни всі поля';
+        error.textContent = 'Fill in all fields';
         error.style.display = 'block';
         return;
       }
@@ -134,21 +134,21 @@
 
       if (mode === 'register') {
         if (localStorage.getItem(key)) {
-          error.textContent = 'Акаунт вже існує';
+          error.textContent = 'Account already exists';
           error.style.display = 'block';
           return;
         }
         localStorage.setItem(key, pass);
-        alert('Реєстрація успішна');
+        alert('Registration is successful');
         toggleMode();
       } else {
         if (localStorage.getItem(key) !== pass) {
-          error.textContent = 'Невірний email або пароль';
+          error.textContent = 'Incorrect email or password';
           error.style.display = 'block';
           return;
         }
 
-        // 🔒 авторизація
+        
         localStorage.setItem('logged_in', 'true');
         localStorage.setItem('current_user', email);
 
@@ -158,3 +158,4 @@
   </script>
 </body>
 </html>
+
